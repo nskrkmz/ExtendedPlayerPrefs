@@ -144,6 +144,46 @@ namespace Nesco.EPP
                 SetString(key, $"{value.x},{value.y}");
         }
         #endregion
+
+        #region for Vector3
+        public static Vector3 GetVector3(string key)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector3(GetString(key));
+            return Vector3.zero;
+        }
+        public static Vector3 GetVector3(string key, Vector3 defaultValue)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector3(GetString(key));
+            return defaultValue;
+        }
+        public static void SetVector3(string key, Vector3 value)
+        {
+            if (IsKeyFormatValid(key))
+                SetString(key, $"{value.x},{value.y},{value.z}");
+        }
+        #endregion
+
+        #region for Vector3Int
+        public static Vector3Int GetVector3Int(string key)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector3Int(GetString(key));
+            return Vector3Int.zero;
+        }
+        public static Vector3Int GetVector3Int(string key, Vector3Int defaultValue)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector3Int(GetString(key));
+            return defaultValue;
+        }
+        public static void SetVector3Int(string key, Vector3Int value)
+        {
+            if (IsKeyFormatValid(key))
+                SetString(key, $"{value.x},{value.y},{value.z}");
+        }
+        #endregion
         private static bool IsKeyFormatValid(string key)
         {
             return regex.IsMatch(key);
@@ -204,6 +244,39 @@ namespace Nesco.EPP
                 throw new FormatException();
 
             return v2;
+        }
+        private static Vector3 StringToVector3(string value)
+        {
+            Vector3 v3 = new();
+            string[] components = value.Split(',');
+
+            if (components.Length == 3)
+            {
+                v3.x = StringToFloat(components[0]);
+                v3.y = StringToFloat(components[1]);
+                v3.z = StringToFloat(components[2]);
+            }
+            else
+                throw new FormatException();
+
+            return v3;
+        }
+
+        private static Vector3Int StringToVector3Int(string value)
+        {
+            Vector3Int v3 = new();
+            string[] components = value.Split(',');
+
+            if (components.Length == 3)
+            {
+                v3.x = StringToInt(components[0]);
+                v3.y = StringToInt(components[1]);
+                v3.z = StringToInt(components[2]);
+            }
+            else
+                throw new FormatException();
+
+            return v3;
         }
         private static int StringToInt(string value)
         {
