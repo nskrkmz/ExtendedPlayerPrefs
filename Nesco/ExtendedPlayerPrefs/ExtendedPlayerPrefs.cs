@@ -84,6 +84,66 @@ namespace Nesco.EPP
             }
         }
         #endregion
+
+        #region for double
+        public static double GetDouble(string key)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return double.Parse(GetString(key));
+            return 0d;
+        }
+        public static double GetDouble(string key, double defaultValue)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return double.Parse(GetString(key));
+            return defaultValue;
+        }
+        public static void SetDouble(string key, double value)
+        {
+            if (IsKeyFormatValid(key))
+                SetString(key, value.ToString());
+        }
+        #endregion
+
+        #region for Vector2
+        public static Vector2 GetVector2(string key)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector2(GetString(key));
+            return Vector2.zero;
+        }
+        public static Vector2 GetVector2(string key, Vector2 defaultValue)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector2(GetString(key));
+            return defaultValue;
+        }
+        public static void SetVector2(string key, Vector2 value)
+        {
+            if (IsKeyFormatValid(key))
+                SetString(key, $"{value.x},{value.y}");
+        }
+        #endregion
+
+        #region for Vector2Int
+        public static Vector2Int GetVector2Int(string key)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector2Int(GetString(key));
+            return Vector2Int.zero;
+        }
+        public static Vector2Int GetVector2Int(string key, Vector2Int defaultValue)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector2Int(GetString(key));
+            return defaultValue;
+        }
+        public static void SetVector2Int(string key, Vector2Int value)
+        {
+            if (IsKeyFormatValid(key))
+                SetString(key, $"{value.x},{value.y}");
+        }
+        #endregion
         private static bool IsKeyFormatValid(string key)
         {
             return regex.IsMatch(key);
@@ -109,6 +169,47 @@ namespace Nesco.EPP
 
             return color;
         }
+
+        private static Vector2 StringToVector2(string value)
+        {
+            Vector2 v2 = new();
+            string[] components = value.Split(',');
+
+            if (components.Length == 2)
+            {
+                v2.x = StringToFloat(components[0]);
+                v2.y = StringToFloat(components[1]);
+            }
+            else
+                throw new FormatException();
+
+            return v2;
+        }
+        private static float StringToFloat(string value)
+        {
+            return float.Parse(value);
+        }
+
+        private static Vector2Int StringToVector2Int(string value)
+        {
+            Vector2Int v2 = new();
+            string[] components = value.Split(',');
+
+            if (components.Length == 2)
+            {
+                v2.x = StringToInt(components[0]);
+                v2.y = StringToInt(components[1]);
+            }
+            else
+                throw new FormatException();
+
+            return v2;
+        }
+        private static int StringToInt(string value)
+        {
+            return Int32.Parse(value);
+        }
+
 
         private static string ColorToString(Color color)
         {
