@@ -184,6 +184,26 @@ namespace Nesco.EPP
                 SetString(key, $"{value.x},{value.y},{value.z}");
         }
         #endregion
+
+        #region for Vector4
+        public static Vector4 GetVector4(string key)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector4(GetString(key));
+            return Vector4.zero;
+        }
+        public static Vector4 GetVector4(string key, Vector4 defaultValue)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToVector4(GetString(key));
+            return defaultValue;
+        }
+        public static void SetVector4(string key, Vector4 value)
+        {
+            if (IsKeyFormatValid(key))
+                SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
+        }
+        #endregion
         private static bool IsKeyFormatValid(string key)
         {
             return regex.IsMatch(key);
@@ -277,6 +297,24 @@ namespace Nesco.EPP
                 throw new FormatException();
 
             return v3;
+        }
+
+        private static Vector4 StringToVector4(string value)
+        {
+            Vector4 v4 = new();
+            string[] components = value.Split(',');
+
+            if (components.Length == 3)
+            {
+                v4.x = StringToFloat(components[0]);
+                v4.y = StringToFloat(components[1]);
+                v4.z = StringToFloat(components[2]);
+                v4.w = StringToFloat(components[3]);
+            }
+            else
+                throw new FormatException();
+
+            return v4;
         }
         private static int StringToInt(string value)
         {
