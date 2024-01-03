@@ -207,6 +207,12 @@ namespace Nesco.EPP
         #endregion
 
         #region for Quaternion
+        public static Quaternion GetQuaternion(string key)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToQuaternion(GetString(key));
+            return default(Quaternion);
+        }
         public static Quaternion GetQuaternion(string key, Quaternion defaultValue)
         {
             if (IsKeyFormatValid(key) && HasKey(key))
