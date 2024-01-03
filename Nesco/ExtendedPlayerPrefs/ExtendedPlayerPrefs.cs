@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Nesco.EPP
 {
@@ -216,6 +217,47 @@ namespace Nesco.EPP
         {
             if (IsKeyFormatValid(key))
                 SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
+        }
+        #endregion
+
+        #region for Generic
+        public static T GetGeneric<T>(string key)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<T>(GetString(key));
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return default(T);
+        }
+        public static T GetGeneric<T>(string key, T defaultValue)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<T>(GetString(key));
+                }
+                catch(Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return defaultValue;
+        }
+        public static void SetGeneric<T>(string key, T value)
+        {
+            if (IsKeyFormatValid(key))
+            {
+                string data = JsonConvert.SerializeObject(value);
+                SetString(key, data);
+            }
         }
         #endregion
         private static bool IsKeyFormatValid(string key)
