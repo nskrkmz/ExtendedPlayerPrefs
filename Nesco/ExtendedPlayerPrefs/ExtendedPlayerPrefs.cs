@@ -204,6 +204,20 @@ namespace Nesco.EPP
                 SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
         }
         #endregion
+
+        #region for Quaternion
+        public static Quaternion GetQuaternion(string key, Quaternion defaultValue)
+        {
+            if (IsKeyFormatValid(key) && HasKey(key))
+                return StringToQuaternion(GetString(key));
+            return defaultValue;
+        }
+        public static void SetQuaternion(string key, Quaternion value)
+        {
+            if (IsKeyFormatValid(key))
+                SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
+        }
+        #endregion
         private static bool IsKeyFormatValid(string key)
         {
             return regex.IsMatch(key);
@@ -297,6 +311,24 @@ namespace Nesco.EPP
                 throw new FormatException();
 
             return v3;
+        }
+
+        private static Quaternion StringToQuaternion(string value)
+        {
+            Quaternion quaternion = new();
+            string[] components = value.Split(',');
+
+            if (components.Length == 3)
+            {
+                quaternion.x = StringToFloat(components[0]);
+                quaternion.y = StringToFloat(components[1]);
+                quaternion.z = StringToFloat(components[2]);
+                quaternion.w = StringToFloat(components[3]);
+            }
+            else
+                throw new FormatException();
+
+            return quaternion;
         }
 
         private static Vector4 StringToVector4(string value)
