@@ -10,266 +10,234 @@ namespace Nesco.EPP
 {
     public class ExtendedPlayerPrefs : PlayerPrefs
     {
-        private const string KEY_PATTERN = "^[a-zA-Z0-9]+$";
-        private static Regex regex = new(KEY_PATTERN);
-        
         public static void DeleteKeys(string[] keys)
         {
             foreach (var key in keys)
             {
-                if (IsKeyFormatValid(key))
-                    DeleteKey(key);
-                else
-                    throw new ArgumentException($"Invalid key: {nameof(key)}");
+                DeleteKey(key);
             }
         }
 
         #region for boolean
         public static bool GetBool(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return GetString(key).ToLower().Contains("t") ? true : false;
             return false;
         }
         public static bool GetBool(string key, bool defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return GetString(key).ToLower().Contains("t") ? true : false;
             return defaultValue;
         }
         public static void SetBool(string key, bool value)
         {
-            if (IsKeyFormatValid(key))
-                SetString(key, value.ToString()[0].ToString());
+            SetString(key, value.ToString()[0].ToString());
         }
         #endregion
 
         #region for char
         public static char GetChar(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return GetString(key)[0];
-            return ' ';
+            return default(char);
         }
         public static char GetChar(string key, char defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return GetString(key)[0];
             return defaultValue;
         }
         public static void SetChar(string key, char value)
         {
-            if (IsKeyFormatValid(key))
-                SetString(key, value.ToString());
+            SetString(key, value.ToString());
         }
         #endregion
 
         #region for Color
         public static Color GetColor(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToColor(GetString(key));
             return Color.white;
         }
         public static Color GetColor(string key, Color defaultColor)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToColor(GetString(key));
             return defaultColor;
         }
         public static void SetColor(string key, Color color)
         {
-            if (IsKeyFormatValid(key))
-            {
-                SetString(key, ColorToString(color));
-            }
+            SetString(key, ColorToString(color));
         }
         #endregion
 
         #region for double
         public static double GetDouble(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return double.Parse(GetString(key));
             return 0d;
         }
         public static double GetDouble(string key, double defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return double.Parse(GetString(key));
             return defaultValue;
         }
         public static void SetDouble(string key, double value)
         {
-            if (IsKeyFormatValid(key))
-                SetString(key, value.ToString());
+            SetString(key, value.ToString());
         }
         #endregion
 
         #region for Vector2
         public static Vector2 GetVector2(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector2(GetString(key));
             return Vector2.zero;
         }
         public static Vector2 GetVector2(string key, Vector2 defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector2(GetString(key));
             return defaultValue;
         }
         public static void SetVector2(string key, Vector2 value)
         {
-            if (IsKeyFormatValid(key))
-                SetString(key, $"{value.x},{value.y}");
+            SetString(key, $"{value.x},{value.y}");
         }
         #endregion
 
         #region for Vector2Int
         public static Vector2Int GetVector2Int(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector2Int(GetString(key));
             return Vector2Int.zero;
         }
         public static Vector2Int GetVector2Int(string key, Vector2Int defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector2Int(GetString(key));
             return defaultValue;
         }
         public static void SetVector2Int(string key, Vector2Int value)
         {
-            if (IsKeyFormatValid(key))
-                SetString(key, $"{value.x},{value.y}");
+            SetString(key, $"{value.x},{value.y}");
         }
         #endregion
 
         #region for Vector3
         public static Vector3 GetVector3(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector3(GetString(key));
             return Vector3.zero;
         }
         public static Vector3 GetVector3(string key, Vector3 defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector3(GetString(key));
             return defaultValue;
         }
         public static void SetVector3(string key, Vector3 value)
         {
-            if (IsKeyFormatValid(key))
-                SetString(key, $"{value.x},{value.y},{value.z}");
+            SetString(key, $"{value.x},{value.y},{value.z}");
         }
         #endregion
 
         #region for Vector3Int
         public static Vector3Int GetVector3Int(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector3Int(GetString(key));
             return Vector3Int.zero;
         }
         public static Vector3Int GetVector3Int(string key, Vector3Int defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector3Int(GetString(key));
             return defaultValue;
         }
         public static void SetVector3Int(string key, Vector3Int value)
         {
-            if (IsKeyFormatValid(key))
-                SetString(key, $"{value.x},{value.y},{value.z}");
+            SetString(key, $"{value.x},{value.y},{value.z}");
         }
         #endregion
 
         #region for Vector4
         public static Vector4 GetVector4(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector4(GetString(key));
             return Vector4.zero;
         }
         public static Vector4 GetVector4(string key, Vector4 defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToVector4(GetString(key));
             return defaultValue;
         }
         public static void SetVector4(string key, Vector4 value)
         {
-            if (IsKeyFormatValid(key))
-                SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
+            SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
         }
         #endregion
 
         #region for Quaternion
         public static Quaternion GetQuaternion(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToQuaternion(GetString(key));
             return default(Quaternion);
         }
         public static Quaternion GetQuaternion(string key, Quaternion defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
                 return StringToQuaternion(GetString(key));
             return defaultValue;
         }
         public static void SetQuaternion(string key, Quaternion value)
         {
-            if (IsKeyFormatValid(key))
-                SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
+            SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
         }
         #endregion
 
         #region for Generic
         public static T GetGeneric<T>(string key)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
             {
-                try
-                {
-                    return JsonConvert.DeserializeObject<T>(GetString(key));
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                return JsonConvert.DeserializeObject<T>(GetString(key));
             }
             return default(T);
         }
         public static T GetGeneric<T>(string key, T defaultValue)
         {
-            if (IsKeyFormatValid(key) && HasKey(key))
+            if (HasKey(key))
             {
-                try
-                {
-                    return JsonConvert.DeserializeObject<T>(GetString(key));
-                }
-                catch(Exception ex)
-                {
-                    throw ex;
-                }
+                return JsonConvert.DeserializeObject<T>(GetString(key));
             }
             return defaultValue;
         }
         public static void SetGeneric<T>(string key, T value)
         {
-            if (IsKeyFormatValid(key))
+            string data = JsonConvert.SerializeObject(value);
+            try
             {
-                string data = JsonConvert.SerializeObject(value);
                 SetString(key, data);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
         #endregion
-        private static bool IsKeyFormatValid(string key)
-        {
-            return regex.IsMatch(key);
-        }
 
         private static Color StringToColor(string colorCode)
         {
@@ -283,7 +251,7 @@ namespace Nesco.EPP
                 float.TryParse(components[2], out color.b) &&
                 float.TryParse(components[3], out color.a);
 
-                if(!state)
+                if (!state)
                     throw new FormatException();
             }
             else
@@ -291,7 +259,6 @@ namespace Nesco.EPP
 
             return color;
         }
-
         private static Vector2 StringToVector2(string value)
         {
             Vector2 v2 = new();
@@ -311,7 +278,6 @@ namespace Nesco.EPP
         {
             return float.Parse(value);
         }
-
         private static Vector2Int StringToVector2Int(string value)
         {
             Vector2Int v2 = new();
@@ -343,7 +309,6 @@ namespace Nesco.EPP
 
             return v3;
         }
-
         private static Vector3Int StringToVector3Int(string value)
         {
             Vector3Int v3 = new();
@@ -360,7 +325,6 @@ namespace Nesco.EPP
 
             return v3;
         }
-
         private static Quaternion StringToQuaternion(string value)
         {
             Quaternion quaternion = new();
@@ -378,7 +342,6 @@ namespace Nesco.EPP
 
             return quaternion;
         }
-
         private static Vector4 StringToVector4(string value)
         {
             Vector4 v4 = new();
@@ -400,8 +363,6 @@ namespace Nesco.EPP
         {
             return Int32.Parse(value);
         }
-
-
         private static string ColorToString(Color color)
         {
             return $"{color.r},{color.g},{color.b},{color.a}";
