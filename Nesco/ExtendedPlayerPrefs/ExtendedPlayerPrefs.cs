@@ -23,7 +23,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
                 return GetString(key).ToLower().Contains("t") ? true : false;
-            return false;
+            return default(bool);
         }
         public static bool GetBool(string key, bool defaultValue)
         {
@@ -61,7 +61,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
                 return StringToColor(GetString(key));
-            return Color.white;
+            return default(Color);
         }
         public static Color GetColor(string key, Color defaultColor)
         {
@@ -80,7 +80,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
                 return double.Parse(GetString(key));
-            return 0d;
+            return default(double);
         }
         public static double GetDouble(string key, double defaultValue)
         {
@@ -99,7 +99,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
                 return StringToVector2(GetString(key));
-            return Vector2.zero;
+            return default(Vector2);
         }
         public static Vector2 GetVector2(string key, Vector2 defaultValue)
         {
@@ -109,7 +109,7 @@ namespace Nesco.EPP
         }
         public static void SetVector2(string key, Vector2 value)
         {
-            SetString(key, $"{value.x},{value.y}");
+            SetString(key, $"{value.x}/{value.y}");
         }
         #endregion
 
@@ -118,7 +118,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
                 return StringToVector2Int(GetString(key));
-            return Vector2Int.zero;
+            return default(Vector2Int);
         }
         public static Vector2Int GetVector2Int(string key, Vector2Int defaultValue)
         {
@@ -128,7 +128,7 @@ namespace Nesco.EPP
         }
         public static void SetVector2Int(string key, Vector2Int value)
         {
-            SetString(key, $"{value.x},{value.y}");
+            SetString(key, $"{value.x}/{value.y}");
         }
         #endregion
 
@@ -137,7 +137,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
                 return StringToVector3(GetString(key));
-            return Vector3.zero;
+            return default(Vector3);
         }
         public static Vector3 GetVector3(string key, Vector3 defaultValue)
         {
@@ -147,7 +147,7 @@ namespace Nesco.EPP
         }
         public static void SetVector3(string key, Vector3 value)
         {
-            SetString(key, $"{value.x},{value.y},{value.z}");
+            SetString(key, $"{value.x}/{value.y}/{value.z}");
         }
         #endregion
 
@@ -156,7 +156,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
                 return StringToVector3Int(GetString(key));
-            return Vector3Int.zero;
+            return default(Vector3Int);
         }
         public static Vector3Int GetVector3Int(string key, Vector3Int defaultValue)
         {
@@ -166,7 +166,7 @@ namespace Nesco.EPP
         }
         public static void SetVector3Int(string key, Vector3Int value)
         {
-            SetString(key, $"{value.x},{value.y},{value.z}");
+            SetString(key, $"{value.x}/{value.y}/{value.z}");
         }
         #endregion
 
@@ -175,7 +175,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
                 return StringToVector4(GetString(key));
-            return Vector4.zero;
+            return default(Vector4);
         }
         public static Vector4 GetVector4(string key, Vector4 defaultValue)
         {
@@ -185,7 +185,7 @@ namespace Nesco.EPP
         }
         public static void SetVector4(string key, Vector4 value)
         {
-            SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
+            SetString(key, $"{value.x}/{value.y}/{value.z}/{value.w}");
         }
         #endregion
 
@@ -204,7 +204,7 @@ namespace Nesco.EPP
         }
         public static void SetQuaternion(string key, Quaternion value)
         {
-            SetString(key, $"{value.x},{value.y},{value.z},{value.w}");
+            SetString(key, $"{value.x}/{value.y}/{value.z}/{value.w}");
         }
         #endregion
 
@@ -227,9 +227,9 @@ namespace Nesco.EPP
         }
         public static void SetGeneric<T>(string key, T value)
         {
-            string data = JsonConvert.SerializeObject(value);
             try
             {
+                string data = JsonConvert.SerializeObject(value);
                 SetString(key, data);
             }
             catch (Exception ex)
@@ -242,7 +242,7 @@ namespace Nesco.EPP
         private static Color StringToColor(string colorCode)
         {
             Color color = Color.clear;
-            string[] components = colorCode.Split(',');
+            string[] components = colorCode.Split('/');
 
             if (components.Length == 4)
             {
@@ -262,7 +262,7 @@ namespace Nesco.EPP
         private static Vector2 StringToVector2(string value)
         {
             Vector2 v2 = new();
-            string[] components = value.Split(',');
+            string[] components = value.Split('/');
 
             if (components.Length == 2)
             {
@@ -281,7 +281,7 @@ namespace Nesco.EPP
         private static Vector2Int StringToVector2Int(string value)
         {
             Vector2Int v2 = new();
-            string[] components = value.Split(',');
+            string[] components = value.Split('/');
 
             if (components.Length == 2)
             {
@@ -296,7 +296,7 @@ namespace Nesco.EPP
         private static Vector3 StringToVector3(string value)
         {
             Vector3 v3 = new();
-            string[] components = value.Split(',');
+            string[] components = value.Split('/');
 
             if (components.Length == 3)
             {
@@ -312,7 +312,7 @@ namespace Nesco.EPP
         private static Vector3Int StringToVector3Int(string value)
         {
             Vector3Int v3 = new();
-            string[] components = value.Split(',');
+            string[] components = value.Split('/');
 
             if (components.Length == 3)
             {
@@ -328,9 +328,9 @@ namespace Nesco.EPP
         private static Quaternion StringToQuaternion(string value)
         {
             Quaternion quaternion = new();
-            string[] components = value.Split(',');
+            string[] components = value.Split('/');
 
-            if (components.Length == 3)
+            if (components.Length == 4)
             {
                 quaternion.x = StringToFloat(components[0]);
                 quaternion.y = StringToFloat(components[1]);
@@ -345,9 +345,9 @@ namespace Nesco.EPP
         private static Vector4 StringToVector4(string value)
         {
             Vector4 v4 = new();
-            string[] components = value.Split(',');
+            string[] components = value.Split('/');
 
-            if (components.Length == 3)
+            if (components.Length == 4)
             {
                 v4.x = StringToFloat(components[0]);
                 v4.y = StringToFloat(components[1]);
@@ -365,7 +365,7 @@ namespace Nesco.EPP
         }
         private static string ColorToString(Color color)
         {
-            return $"{color.r},{color.g},{color.b},{color.a}";
+            return $"{color.r}/{color.g}/{color.b}/{color.a}";
         }
     }
 }
