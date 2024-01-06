@@ -5,5 +5,5 @@
     "documentationUrl": "https://github.com/nskrkmz/ExtendedPlayerPrefs",
     "changelogUrl": "https://github.com/nskrkmz/ExtendedPlayerPrefs/releases",
     "licensesUrl": "https://github.com/nskrkmz/ExtendedPlayerPrefs/blob/master/LICENSE.txt",
-    "description": ""
+    "description": "About this package introduces additional functionalities for handling various data types conveniently in UnityEngine.PlayerPrefs"
   }
