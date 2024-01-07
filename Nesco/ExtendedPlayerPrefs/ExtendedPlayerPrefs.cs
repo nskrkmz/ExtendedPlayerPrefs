@@ -17,6 +17,14 @@ namespace Nesco.EPP
             }
         }
 
+        public static void DeleteKeys(List<string> keys)
+        {
+            foreach (var key in keys)
+            {
+                DeleteKey(key);
+            }
+        }
+
         #region for boolean
         public static bool GetBool(string key)
         {
