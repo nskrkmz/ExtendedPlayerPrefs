@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text;
 using UnityEngine;
-using Newtonsoft.Json;
 
 namespace Nesco.EPP
 {
@@ -213,7 +212,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
             {
-                return JsonConvert.DeserializeObject<T>(GetString(key));
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(GetString(key));
             }
             return default(T);
         }
@@ -221,7 +220,7 @@ namespace Nesco.EPP
         {
             if (HasKey(key))
             {
-                return JsonConvert.DeserializeObject<T>(GetString(key));
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(GetString(key));
             }
             return defaultValue;
         }
@@ -229,7 +228,7 @@ namespace Nesco.EPP
         {
             try
             {
-                string data = JsonConvert.SerializeObject(value);
+                string data = Newtonsoft.Json.JsonConvert.SerializeObject(value);
                 SetString(key, data);
             }
             catch (Exception ex)

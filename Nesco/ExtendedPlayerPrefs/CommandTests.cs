@@ -5,10 +5,16 @@ using Nesco.EPP;
 public class CommandTests : MonoBehaviour
 {
     [SerializeField] TestResults testResults;
+    private List<string> _keys = new List<string>();
     void Start()
     {
         Tests_Before_Data_Recording();
         Tests_WriteAndRead();
+    }
+
+    private void OnDestroy()
+    {
+        ExtendedPlayerPrefs.DeleteKeys(_keys);
     }
 
     public void Tests_Before_Data_Recording()
@@ -53,6 +59,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Bool_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetBool("SetBool", true);
+        _keys.Add("SetBool");
         if (ExtendedPlayerPrefs.GetBool("SetBool"))
         {
             testResults.Bool_CommandGroup.WriteAndRead = true;
@@ -73,6 +80,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Char_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetChar("SetChar", '=');
+        _keys.Add("SetChar");
         if (ExtendedPlayerPrefs.GetChar("SetChar") == '=')
         {
             testResults.Char_CommandGroup.WriteAndRead = true;
@@ -93,6 +101,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Color_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetColor("SetColor", Color.yellow);
+        _keys.Add("SetColor");
         if (ExtendedPlayerPrefs.GetColor("SetColor") == Color.yellow)
         {
             testResults.Color_CommandGroup.WriteAndRead = true;
@@ -113,6 +122,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Double_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetDouble("SetDouble", 897345789.42d);
+        _keys.Add("SetDouble");
         if (ExtendedPlayerPrefs.GetDouble("SetDouble") == 897345789.42d)
         {
             testResults.Double_CommandGroup.WriteAndRead = true;
@@ -133,6 +143,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Quaternion_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetQuaternion("SetQuaternion", new Quaternion(23.43f, 234.45f, -123.45f, 543f));
+        _keys.Add("SetQuaternion");
         if (ExtendedPlayerPrefs.GetQuaternion("SetQuaternion") == new Quaternion(23.43f, 234.45f, -123.45f, 543f))
         {
             testResults.Quaternion_CommandGroup.WriteAndRead = true;
@@ -154,6 +165,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Vector2_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetVector2("SetVector2", Vector2.one * 9345.548f);
+        _keys.Add("SetVector2");
         if (ExtendedPlayerPrefs.GetVector2("SetVector2") == Vector2.one * 9345.548f)
         {
             testResults.Vector2_CommandGroup.WriteAndRead = true;
@@ -174,6 +186,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Vector2Int_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetVector2Int("SetVector2Int", Vector2Int.one * 7826345);
+        _keys.Add("SetVector2Int");
         if (ExtendedPlayerPrefs.GetVector2Int("SetVector2Int") == Vector2Int.one * 7826345)
         {
             testResults.Vector2Int_CommandGroup.WriteAndRead = true;
@@ -194,6 +207,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Vector3_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetVector3("SetVector3", Vector3.one * 8923745.234267f);
+        _keys.Add("SetVector3");
         if (ExtendedPlayerPrefs.GetVector3("SetVector3") == Vector3.one * 8923745.234267f)
         {
             testResults.Vector3_CommandGroup.WriteAndRead = true;
@@ -214,6 +228,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Vector3Int_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetVector3Int("SetVector3Int", Vector3Int.one * 734537);
+        _keys.Add("SetVector3Int");
         if (ExtendedPlayerPrefs.GetVector3Int("SetVector3Int") == Vector3Int.one * 734537)
         {
             testResults.Vector3Int_CommandGroup.WriteAndRead = true;
@@ -234,6 +249,7 @@ public class CommandTests : MonoBehaviour
     public void Test_Vector4_WriteAndRead()
     {
         ExtendedPlayerPrefs.SetVector4("SetVector4", Vector4.one * 76345.21345f);
+        _keys.Add("SetVector4");
         if (ExtendedPlayerPrefs.GetVector4("SetVector4") == Vector4.one * 76345.21345f)
         {
             testResults.Vector4_CommandGroup.WriteAndRead = true;
