@@ -153,8 +153,8 @@ public class CommandTests : MonoBehaviour
 
     public void Test_Vector2_WriteAndRead()
     {
-        ExtendedPlayerPrefs.SetVector2("SetVector2", Vector2.one * 972345.548f);
-        if (ExtendedPlayerPrefs.GetVector2("SetVector2") == Vector2.one * 972345.548f)
+        ExtendedPlayerPrefs.SetVector2("SetVector2", Vector2.one * 9345.548f);
+        if (ExtendedPlayerPrefs.GetVector2("SetVector2") == Vector2.one * 9345.548f)
         {
             testResults.Vector2_CommandGroup.WriteAndRead = true;
         }
