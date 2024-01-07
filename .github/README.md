@@ -1,4 +1,5 @@
 # Nesco - ExtendedPlayerPrefs
+[![openupm](https://img.shields.io/npm/v/com.nesco.extendedplayerprefs?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.nesco.extendedplayerprefs/)
 
 This package introduces additional functionalities for handling various data types conveniently in UnityEngine.PlayerPrefs
 
