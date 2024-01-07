@@ -125,7 +125,7 @@ public class CommandTests : MonoBehaviour
         {
             testResults.Quaternion_CommandGroup.Before_Data_Recording_With_Param = true;
         }
-        if (ExtendedPlayerPrefs.GetQuaternion("GetQuaternion") == default(Quaternion))
+        if (Quaternion.Equals(ExtendedPlayerPrefs.GetQuaternion("GetQuaternion"), default(Quaternion)))
         {
             testResults.Quaternion_CommandGroup.Before_Data_Recording = true;
         }
