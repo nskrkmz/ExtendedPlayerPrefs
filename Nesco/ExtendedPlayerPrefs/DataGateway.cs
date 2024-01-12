@@ -15,7 +15,7 @@ namespace Nesco.EPP
         private const string DELETE_KEY = "/HDEL/";
         private const string DATA_SET = "/HSET/";
 
-        public static async void HasKeyRequest(IDBConfig dBConfig, IRecord record, string key, Action<bool> callback)
+        public static async void HasKeyRequest<T>(IDBConfig dBConfig, IRecord record, string key, Action<ResultSet<T>> callback, ResultSet<T> resultSet)
         {
             using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
                                                                                   CHECK_KEY,
@@ -29,10 +29,24 @@ namespace Nesco.EPP
                 while (!asyncOperation.isDone)
                     await Task.Yield();
 
-                callback(req.downloadHandler.text.Contains("1"));
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    callback(resultSet);
+                    return;
+                }
+
+                bool state = ResponseOperate.Check(req.downloadHandler.text) &&  req.downloadHandler.text.Contains("1");
+
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
+                callback(resultSet);
             }
         }
-        public static async void HasKeyRequest(IDBConfig dBConfig, IRecord record, string key, Action<Tuple<bool, UnityWebRequest.Result>> callback)
+        public static async void HasKeyRequestAsync<T>(IDBConfig dBConfig, IRecord record, string key, ResultSet<T> resultSet)
         {
             using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
                                                                                   CHECK_KEY,
@@ -46,41 +60,19 @@ namespace Nesco.EPP
                 while (!asyncOperation.isDone)
                     await Task.Yield();
 
-                callback(new Tuple<bool, UnityWebRequest.Result>(req.downloadHandler.text.Contains("1"), req.result));
-            }
-        }
-        public static async Task<bool> HasKeyRequestAsync(IDBConfig dBConfig, IRecord record, string key)
-        {
-            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
-                                                                                  CHECK_KEY,
-                                                                                  record.RecordHash,
-                                                                                  key)))
-            {
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    return;
+                }
 
-                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
+                bool state = ResponseOperate.Check(req.downloadHandler.text) && req.downloadHandler.text.Contains("1");
 
-                while (!asyncOperation.isDone)
-                    await Task.Yield();
-
-                return req.downloadHandler.text.Contains("1");
-            }
-        }
-        public static async Task<Tuple<bool, UnityWebRequest.Result>> HasKeyRequestAsyncResultset(IDBConfig dBConfig, IRecord record, string key)
-        {
-            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
-                                                                                  CHECK_KEY,
-                                                                                  record.RecordHash,
-                                                                                  key)))
-            {
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
-
-                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
-
-                while (!asyncOperation.isDone)
-                    await Task.Yield();
-
-                return new Tuple<bool, UnityWebRequest.Result>(req.downloadHandler.text.Contains("1"), req.result);
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
             }
         }
 
@@ -95,7 +87,7 @@ namespace Nesco.EPP
                 req.SendWebRequest();
             }
         }
-        public static async void DeleteKeyRequest(IDBConfig dBConfig, IRecord record, string key, Action<bool> callback)
+        public static async void DeleteKeyRequest<T>(IDBConfig dBConfig, IRecord record, string key, Action<ResultSet<T>> callback, ResultSet<T> resultSet)
         {
             using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
                                                                                   DELETE_KEY,
@@ -108,10 +100,24 @@ namespace Nesco.EPP
                 while (!asyncOperation.isDone)
                     await Task.Yield();
 
-                callback(req.downloadHandler.text.Contains("1"));
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    callback(resultSet);
+                    return;
+                }
+
+                bool state = ResponseOperate.Check(req.downloadHandler.text);
+
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
+                callback(resultSet);
             }
         }
-        public static async void DeleteKeyRequest(IDBConfig dBConfig, IRecord record, string key, Action<Tuple<bool, UnityWebRequest.Result>> callback)
+        public static async void DeleteKeyRequestAsync<T>(IDBConfig dBConfig, IRecord record, string key, ResultSet<T> resultSet)
         {
             using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
                                                                                   DELETE_KEY,
@@ -124,34 +130,19 @@ namespace Nesco.EPP
                 while (!asyncOperation.isDone)
                     await Task.Yield();
 
-                callback(new Tuple<bool, UnityWebRequest.Result>(req.downloadHandler.text.Contains("1"), req.result));
-            }
-        }
-        public static async Task<bool> DeleteKeyRequestAsync(IDBConfig dBConfig, IRecord record, string key)
-        {
-            return await PerformDeleteKeyAsync<bool>(dBConfig, record, key);
-        }
-        public static async Task<Tuple<bool, UnityWebRequest.Result>> DeleteKeyRequestAsyncResultset(IDBConfig dBConfig, IRecord record, string key)
-        {
-            return await PerformDeleteKeyAsync<Tuple<bool, UnityWebRequest.Result>>(dBConfig, record, key);
-        }
-        private static async Task<T> PerformDeleteKeyAsync<T>(IDBConfig dBConfig, IRecord record, string key)
-        {
-            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
-                                                                                  DELETE_KEY,
-                                                                                  record.RecordHash,
-                                                                                  key)))
-            {
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
-                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    return;
+                }
 
-                while (!asyncOperation.isDone)
-                    await Task.Yield();
+                bool state = ResponseOperate.Check(req.downloadHandler.text);
 
-                if (typeof(T) == typeof(bool))
-                    return (T)(object)req.downloadHandler.text.Contains("1");
-                else
-                    return (T)(object)new Tuple<bool, UnityWebRequest.Result>(req.downloadHandler.text.Contains("1"), req.result);
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
             }
         }
 
@@ -171,7 +162,7 @@ namespace Nesco.EPP
                     await Task.Yield();
             }
         }
-        public static async void SetStringRequest(IDBConfig dBConfig, IRecord record, string key, string value, Action<bool> callback)
+        public static async void SetStringRequest<T>(IDBConfig dBConfig, IRecord record, string key, string value, Action<ResultSet<T>> callback, ResultSet<T> resultSet)
         {
             using (UnityWebRequest req = UnityWebRequest.Post(Get_PostRequestString(dBConfig.RestURL, DATA_SET, record.RecordHash, key), value, "application/text"))
             {
@@ -184,14 +175,24 @@ namespace Nesco.EPP
                     await Task.Yield();
 
                 if (req.result != UnityWebRequest.Result.Success)
-                    callback(false);
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    callback(resultSet);
+                    return;
+                }
 
                 bool state = ResponseOperate.Check(req.downloadHandler.text);
 
-                callback(state);
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
+
+                callback(resultSet);
             }
         }
-        public static async void SetStringRequest(IDBConfig dBConfig, IRecord record, string key, string value, Action<Tuple<bool, UnityWebRequest.Result>> callback)
+        public static async void SetStringRequestAsync<T>(IDBConfig dBConfig, IRecord record, string key, string value, ResultSet<T> resultSet)
         {
             using (UnityWebRequest req = UnityWebRequest.Post(Get_PostRequestString(dBConfig.RestURL, DATA_SET, record.RecordHash, key), value, "application/text"))
             {
@@ -204,52 +205,20 @@ namespace Nesco.EPP
                     await Task.Yield();
 
                 if (req.result != UnityWebRequest.Result.Success)
-                    callback(new Tuple<bool, UnityWebRequest.Result>(false, req.result));
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    return;
+                }
 
                 bool state = ResponseOperate.Check(req.downloadHandler.text);
 
-                callback(new Tuple<bool, UnityWebRequest.Result>(state, req.result));
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
             }
         }
-        public static async Task<bool> SetStringRequestAsync(IDBConfig dBConfig, IRecord record, string key, string value)
-        {
-            using (UnityWebRequest req = UnityWebRequest.Post(Get_PostRequestString(dBConfig.RestURL, DATA_SET, record.RecordHash, key), value, "application/text"))
-            {
-                req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(value));
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
-
-                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
-
-                while (!asyncOperation.isDone)
-                    await Task.Yield();
-
-                if (req.result != UnityWebRequest.Result.Success)
-                    return false;
-
-                bool state = ResponseOperate.Check(req.downloadHandler.text);
-                return state;
-            }
-        }
-        public static async Task<Tuple<bool, UnityWebRequest.Result>> SetStringRequestAsyncResultset(IDBConfig dBConfig, IRecord record, string key, string value)
-        {
-            using (UnityWebRequest req = UnityWebRequest.Post(Get_PostRequestString(dBConfig.RestURL, DATA_SET, record.RecordHash, key), value, "application/text"))
-            {
-                req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(value));
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
-
-                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
-
-                while (!asyncOperation.isDone)
-                    await Task.Yield();
-
-                if (req.result != UnityWebRequest.Result.Success)
-                    return new Tuple<bool, UnityWebRequest.Result>(false, req.result);
-
-                bool state = ResponseOperate.Check(req.downloadHandler.text);
-                return new Tuple<bool, UnityWebRequest.Result>(state, req.result);
-            }
-        }
-
 
 
         // { "result": "OK" }
