@@ -14,6 +14,7 @@ namespace Nesco.EPP
         private const string CHECK_KEY = "/HEXISTS/";
         private const string DELETE_KEY = "/HDEL/";
         private const string DATA_SET = "/HSET/";
+        private const string DELETE_RECORD = "/DEL/";
 
         public static async void HasKeyRequest<T>(IDBConfig dBConfig, IRecord record, string key, Action<ResultSet<T>> callback, ResultSet<T> resultSet)
         {
@@ -22,7 +23,7 @@ namespace Nesco.EPP
                                                                                   record.RecordHash,
                                                                                   key)))
             {
-                if(dBConfig.Readonly)
+                if (dBConfig.Readonly)
                     req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
                 else
                     req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
@@ -41,7 +42,7 @@ namespace Nesco.EPP
                     return;
                 }
 
-                bool state = ResponseOperate.Check(req.downloadHandler.text) &&  req.downloadHandler.text.Contains("1");
+                bool state = ResponseOperate.Check(req.downloadHandler.text) && req.downloadHandler.text.Contains("1");
 
                 resultSet.IsDone = true;
                 resultSet.RequestResult = req.result;
@@ -89,10 +90,7 @@ namespace Nesco.EPP
                                                                                   record.RecordHash,
                                                                                   key)))
             {
-                if (dBConfig.Readonly)
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
-                else
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
                 req.SendWebRequest();
             }
         }
@@ -103,10 +101,8 @@ namespace Nesco.EPP
                                                                                   record.RecordHash,
                                                                                   key)))
             {
-                if (dBConfig.Readonly)
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
-                else
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -137,10 +133,8 @@ namespace Nesco.EPP
                                                                                   record.RecordHash,
                                                                                   key)))
             {
-                if (dBConfig.Readonly)
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
-                else
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -171,10 +165,8 @@ namespace Nesco.EPP
                                                                                   key,
                                                                                   value)))
             {
-                if (dBConfig.Readonly)
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
-                else
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -187,10 +179,7 @@ namespace Nesco.EPP
             using (UnityWebRequest req = UnityWebRequest.Post(Get_PostRequestString(dBConfig.RestURL, DATA_SET, record.RecordHash, key), value, "application/text"))
             {
                 req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(value));
-                if (dBConfig.Readonly)
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
-                else
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -220,10 +209,154 @@ namespace Nesco.EPP
             using (UnityWebRequest req = UnityWebRequest.Post(Get_PostRequestString(dBConfig.RestURL, DATA_SET, record.RecordHash, key), value, "application/text"))
             {
                 req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(value));
-                if (dBConfig.Readonly)
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
-                else
-                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+
+                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
+
+                while (!asyncOperation.isDone)
+                    await Task.Yield();
+
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    return;
+                }
+
+                bool state = ResponseOperate.Check(req.downloadHandler.text);
+
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
+            }
+        }
+
+        public static void DeleteKeysRequest(IDBConfig dBConfig, IRecord record, string[] keys)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
+                                                                                  DELETE_KEY,
+                                                                                  record.RecordHash,
+                                                                                  keys)))
+            {
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                req.SendWebRequest();
+            }
+        }
+        public static async void DeleteKeysRequest<T>(IDBConfig dBConfig, IRecord record, string[] keys, Action<ResultSet<T>> callback, ResultSet<T> resultSet)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
+                                                                                  DELETE_KEY,
+                                                                                  record.RecordHash,
+                                                                                  keys)))
+            {
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+
+                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
+
+                while (!asyncOperation.isDone)
+                    await Task.Yield();
+
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    callback(resultSet);
+                    return;
+                }
+
+                bool state = ResponseOperate.Check(req.downloadHandler.text);
+
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
+                callback(resultSet);
+            }
+        }
+        public static async void DeleteKeysRequestAsync<T>(IDBConfig dBConfig, IRecord record, string[] keys, ResultSet<T> resultSet)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
+                                                                                  DELETE_KEY,
+                                                                                  record.RecordHash,
+                                                                                  keys)))
+            {
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+
+                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
+
+                while (!asyncOperation.isDone)
+                    await Task.Yield();
+
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    return;
+                }
+
+                bool state = ResponseOperate.Check(req.downloadHandler.text);
+
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
+            }
+        }
+
+        public static void DeleteAllRequest(IDBConfig dBConfig, IRecord record)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
+                                                                                  DELETE_RECORD,
+                                                                                  record.RecordHash)))
+            {
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                req.SendWebRequest();
+            }
+        }
+        public static async void DeleteAllRequest<T>(IDBConfig dBConfig, IRecord record, Action<ResultSet<T>> callback, ResultSet<T> resultSet)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
+                                                                                  DELETE_RECORD,
+                                                                                  record.RecordHash)))
+            {
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+
+                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
+
+                while (!asyncOperation.isDone)
+                    await Task.Yield();
+
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    callback(resultSet);
+                    return;
+                }
+
+                bool state = ResponseOperate.Check(req.downloadHandler.text);
+
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
+                callback(resultSet);
+            }
+        }
+        public static async void DeleteAllRequestAsync<T>(IDBConfig dBConfig, IRecord record, ResultSet<T> resultSet)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
+                                                                                  DELETE_RECORD,
+                                                                                  record.RecordHash)))
+            {
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -270,6 +403,28 @@ namespace Nesco.EPP
             builder.Append(key);
             return builder.ToString();
         }
+        internal static string Get_GetRequestString(string url, string command, string recordHash)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(url);
+            builder.Append(command);
+            builder.Append(recordHash);
+            return builder.ToString();
+        }
+        internal static string Get_GetRequestString(string url, string command, string recordHash, string[] keys)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(url);
+            builder.Append(command);
+            builder.Append(recordHash);
+            builder.Append("/");
+            foreach (var key in keys)
+            {
+                builder.Append(key);
+                builder.Append("/");
+            }
+            return builder.ToString();
+        }
         internal static string Get_GetRequestString(string url, string command, string recordHash, string key, string value)
         {
             StringBuilder builder = new StringBuilder();
@@ -291,6 +446,20 @@ namespace Nesco.EPP
             builder.Append("/");
             builder.Append(key);
             builder.Append("/");
+            return builder.ToString();
+        }
+        internal static string Get_PostRequestString(string url, string command, string recordHash, string[] keys)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(url);
+            builder.Append(command);
+            builder.Append(recordHash);
+            builder.Append("/");
+            foreach (var key in keys)
+            {
+                builder.Append(key);
+                builder.Append("/");
+            }
             return builder.ToString();
         }
     }

@@ -16,111 +16,84 @@ namespace Nesco.EPP
     public class RemoteExtendedPlayerPrefs
     {
         #region for Keys
-        public void HasKey(IDBConfig dBConfig, IRecord record, string key)
+        public void HasKey(IDBConfig dBConfig, IRecord record, string key, Action<ResultSet<bool>> callback)
         {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.HasKeyRequest(dBConfig, record, key, callback,resultSet);
         }
-        public void HasKey(IDBConfig dBConfig, IRecord record, string key, Action<bool> callback)
+        public ResultSet<bool> HasKeyAsync(IDBConfig dBConfig, IRecord record, string key)
         {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.HasKeyRequestAsync(dBConfig, record, key, resultSet);
+            return resultSet;
         }
-        public void HasKey(IDBConfig dBConfig, IRecord record, string key, Action<List<UnityWebRequest.Result>> callback)
-        {
-
-        }
-        public async Task<bool> HasKeyAsync(IDBConfig dBConfig, IRecord record, string key)
-        {
-
-        }
-        public async Task<List<UnityWebRequest.Result>> HasKeyAsync(IDBConfig dBConfig, IRecord record, string key)
-        {
-
-        }
+        
 
         public void DeleteKey(IDBConfig dBConfig, IRecord record, string key)
         {
-
+            DataGateway.DeleteKeyRequest(dBConfig, record, key);
         }
-        public void DeleteKey(IDBConfig dBConfig, IRecord record, string key, Action<bool> callback)
+        public void DeleteKey(IDBConfig dBConfig, IRecord record, string key, Action<ResultSet<bool>> callback)
         {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.DeleteKeyRequest(dBConfig, record, key, callback, resultSet);
         }
-        public void DeleteKey(IDBConfig dBConfig, IRecord record, string key, Action<List<UnityWebRequest.Result>> callback)
+        public ResultSet<bool> DeleteKeyAsync(IDBConfig dBConfig, IRecord record, string key)
         {
-
-        }
-        public async Task<bool> DeleteKeyAsync(IDBConfig dBConfig, IRecord record, string key)
-        {
-
-        }
-        public async Task<List<UnityWebRequest.Result>> DeleteKeyAsync(IDBConfig dBConfig, IRecord record, string key)
-        {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.DeleteKeyRequestAsync(dBConfig, record, key, resultSet);
+            return resultSet;
         }
 
         public void DeleteKeys(IDBConfig dBConfig, IRecord record, string[] keys)
         {
-
+            DataGateway.DeleteKeysRequest(dBConfig, record, keys);
         }
-        public void DeleteKeys(IDBConfig dBConfig, IRecord record, string[] keys, Action<List<bool>> callback)
+        public void DeleteKeys(IDBConfig dBConfig, IRecord record, string[] keys, Action<ResultSet<bool>> callback)
         {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.DeleteKeysRequest(dBConfig, record, keys, callback, resultSet);
         }
-        public void DeleteKeys(IDBConfig dBConfig, IRecord record, string[] keys, Action<List<UnityWebRequest.Result>> callback)
+        public ResultSet<bool> DeleteKeysAsync(IDBConfig dBConfig, IRecord record, string[] keys)
         {
-
-        }
-        public async Task<List<bool>> DeleteKeysAsync(IDBConfig dBConfig, IRecord record, string[] keys)
-        {
-
-        }
-        public async Task<List<UnityWebRequest.Result>> DeleteKeysAsync(IDBConfig dBConfig, IRecord record, string[] keys)
-        {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.DeleteKeysRequestAsync(dBConfig, record, keys, resultSet);
+            return resultSet;
         }
 
         public void DeleteKeys(IDBConfig dBConfig, IRecord record, List<string> keys)
         {
-
+            DataGateway.DeleteKeysRequest(dBConfig, record, keys.ToArray());
         }
-        public void DeleteKeys(IDBConfig dBConfig, IRecord record, List<string> keys, Action<List<bool>> callback)
+        public void DeleteKeys(IDBConfig dBConfig, IRecord record, List<string> keys, Action<ResultSet<bool>> callback)
         {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.DeleteKeysRequest(dBConfig, record, keys.ToArray(), callback, resultSet);
         }
-        public void DeleteKeys(IDBConfig dBConfig, IRecord record, List<string> keys, Action<List<UnityWebRequest.Result>> callback)
+        public ResultSet<bool> DeleteKeysAsync(IDBConfig dBConfig, IRecord record, List<string> keys)
         {
-
-        }
-        public async Task<List<bool>> DeleteKeysAsync(IDBConfig dBConfig, IRecord record, List<string> keys)
-        {
-
-        }
-        public async Task<List<UnityWebRequest.Result>> DeleteKeysAsync(IDBConfig dBConfig, IRecord record, List<string> keys)
-        {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.DeleteKeysRequestAsync(dBConfig, record, keys.ToArray(), resultSet);
+            return resultSet;
         }
 
         public void DeleteAll(IDBConfig dBConfig, IRecord record)
         {
-
+            DataGateway.DeleteAllRequest(dBConfig, record);
         }
-        public void DeleteAll(IDBConfig dBConfig, IRecord record, Action<List<bool>> callback)
+        public void DeleteAll(IDBConfig dBConfig, IRecord record, Action<ResultSet<bool>> callback)
         {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.DeleteAllRequest(dBConfig, record,callback,resultSet);
         }
-        public void DeleteAll(IDBConfig dBConfig, IRecord record, Action<List<UnityWebRequest.Result>> callback)
+        public ResultSet<bool> DeleteAllAsync(IDBConfig dBConfig, IRecord record)
         {
-
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.DeleteAllRequestAsync(dBConfig, record, resultSet);
+            return resultSet;
         }
-        public async Task<bool> DeleteAllAsync(IDBConfig dBConfig, IRecord record)
-        {
 
-        }
-        public async Task<List<UnityWebRequest.Result>> DeleteAllAsync(IDBConfig dBConfig, IRecord record)
-        {
-
-        }
-        #endregion
+        /*
 
         #region for boolean
         public bool GetBool(IDBConfig dBConfig, IRecord record, string key)
@@ -380,24 +353,25 @@ namespace Nesco.EPP
         }
         public async Task<UnityWebRequest.Result> GetStringAsync(IDBConfig dBConfig, IRecord record, string key, string defaultValue)
         {
-        }
+        }*/
 
         public void SetString(IDBConfig dBConfig, IRecord record, string key, string value)
         {
+            DataGateway.SetStringRequest(dBConfig, record, key, value);
         }
-        public void SetString(IDBConfig dBConfig, IRecord record, string key, string value, Action<bool> callback)
+        public void SetString(IDBConfig dBConfig, IRecord record, string key, string value, Action<ResultSet<bool>> callback)
         {
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.SetStringRequest(dBConfig, record, key, value, callback, resultSet);
         }
-        public void SetString(IDBConfig dBConfig, IRecord record, string key, string value, Action<UnityWebRequest.Result> callback)
+        public ResultSet<bool> SetStringAsync(IDBConfig dBConfig, IRecord record, string key, string value)
         {
-        }
-        public async Task<bool> SetStringAsync(IDBConfig dBConfig, IRecord record, string key, string value)
-        {
-        }
-        public async Task<UnityWebRequest.Result> SetStringAsync(IDBConfig dBConfig, IRecord record, string key, string value)
-        {
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            DataGateway.SetStringRequestAsync(dBConfig, record, key, value, resultSet);
+            return resultSet;
         }
         #endregion
+        /*
 
         #region for Int
         public int GetInt(IDBConfig dBConfig, IRecord record, string key)
@@ -874,6 +848,9 @@ namespace Nesco.EPP
         public async Task<UnityWebRequest.Result> SetGenericAsync<T>(IDBConfig dBConfig, IRecord record, string key, T value)
         {
         }
+        
         #endregion
+        */
+
     }
 }
