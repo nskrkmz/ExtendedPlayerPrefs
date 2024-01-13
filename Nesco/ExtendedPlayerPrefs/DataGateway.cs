@@ -22,7 +22,10 @@ namespace Nesco.EPP
                                                                                   record.RecordHash,
                                                                                   key)))
             {
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                if(dBConfig.Readonly)
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
+                else
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -53,7 +56,10 @@ namespace Nesco.EPP
                                                                                   record.RecordHash,
                                                                                   key)))
             {
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                if (dBConfig.Readonly)
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
+                else
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -83,7 +89,10 @@ namespace Nesco.EPP
                                                                                   record.RecordHash,
                                                                                   key)))
             {
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                if (dBConfig.Readonly)
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
+                else
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
                 req.SendWebRequest();
             }
         }
@@ -94,7 +103,11 @@ namespace Nesco.EPP
                                                                                   record.RecordHash,
                                                                                   key)))
             {
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                if (dBConfig.Readonly)
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
+                else
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
                 while (!asyncOperation.isDone)
@@ -124,7 +137,11 @@ namespace Nesco.EPP
                                                                                   record.RecordHash,
                                                                                   key)))
             {
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                if (dBConfig.Readonly)
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
+                else
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
                 while (!asyncOperation.isDone)
@@ -154,7 +171,10 @@ namespace Nesco.EPP
                                                                                   key,
                                                                                   value)))
             {
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                if (dBConfig.Readonly)
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
+                else
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -167,7 +187,10 @@ namespace Nesco.EPP
             using (UnityWebRequest req = UnityWebRequest.Post(Get_PostRequestString(dBConfig.RestURL, DATA_SET, record.RecordHash, key), value, "application/text"))
             {
                 req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(value));
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                if (dBConfig.Readonly)
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
+                else
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -197,7 +220,10 @@ namespace Nesco.EPP
             using (UnityWebRequest req = UnityWebRequest.Post(Get_PostRequestString(dBConfig.RestURL, DATA_SET, record.RecordHash, key), value, "application/text"))
             {
                 req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(value));
-                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                if (dBConfig.Readonly)
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.ReadonlyAuthorizationHeaderValue);
+                else
+                    req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
 
                 UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
 
@@ -220,7 +246,7 @@ namespace Nesco.EPP
             }
         }
 
-
+        /////// Server Json response examples
         // { "result": "OK" }
         // { "result": null }
         // { "result": 137 }
