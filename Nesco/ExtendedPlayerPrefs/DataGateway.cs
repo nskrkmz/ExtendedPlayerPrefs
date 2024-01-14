@@ -379,6 +379,78 @@ namespace Nesco.EPP
             }
         }
 
+        public static void SetBoolRequest(IDBConfig dBConfig, IRecord record, string key, bool value)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
+                                                                                  DATA_SET,
+                                                                                  record.RecordHash,
+                                                                                  key,
+                                                                                  value.ToString())))
+            {
+
+                req.SetRequestHeader(dBConfig.AuthorizationHeaderName, dBConfig.AuthorizationHeaderValue);
+                req.SendWebRequest();
+            }
+        }
+        public static async void SetBoolRequest<T>(IDBConfig dBConfig, IRecord record, string key, bool value, Action<ResultSet<T>> callback, ResultSet<T> resultSet)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
+                                                                                  DATA_SET,
+                                                                                  record.RecordHash,
+                                                                                  key,
+                                                                                  value.ToString())))
+            {
+
+                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
+
+                while (!asyncOperation.isDone)
+                    await Task.Yield();
+
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                    callback(resultSet);
+                    return;
+                }
+
+                bool state = ResponseOperate.Check(req.downloadHandler.text);
+
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
+                callback(resultSet);
+            }
+        }
+        public static async void SetBoolRequestAsync<T>(IDBConfig dBConfig, IRecord record, string key, bool value, ResultSet<T> resultSet)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(Get_GetRequestString(dBConfig.RestURL,
+                                                                                  DATA_SET,
+                                                                                  record.RecordHash,
+                                                                                  key,
+                                                                                  value.ToString())))
+            {
+
+                UnityWebRequestAsyncOperation asyncOperation = req.SendWebRequest();
+
+                while (!asyncOperation.isDone)
+                    await Task.Yield();
+
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    resultSet.IsDone = true;
+                    resultSet.RequestResult = req.result;
+                    resultSet.Value = (T)(object)false;
+                }
+
+                bool state = ResponseOperate.Check(req.downloadHandler.text);
+
+                resultSet.IsDone = true;
+                resultSet.RequestResult = req.result;
+                resultSet.Value = (T)(object)state;
+            }
+        }
         /////// Server Json response examples
         // { "result": "OK" }
         // { "result": null }
